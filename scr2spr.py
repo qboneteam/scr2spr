@@ -31,10 +31,10 @@ def savebin2file(perem, nameoffile):
     f.close()
 
 
-def takeonesprite(temp_x, temp_y, temp_l, temp_h):
+def takeonesprite(temp_x, temp_y, temp_l, temp_w):
     k = bytearray()
     offset = xytoaddr(temp_x, temp_y)
-    for l in range(temp_h * 8):
+    for l in range(temp_w * 8):
         k += a[offset:offset + temp_l]
         offset = nextline(offset)
     return k
@@ -44,8 +44,8 @@ def createparser():
     myparser = argparse.ArgumentParser()
     myparser.add_argument('-x', '--x', default=0, type=int)
     myparser.add_argument('-y', '--y', default=0, type=int)
-    myparser.add_argument('-len', '--length', type=int)
-    myparser.add_argument('-hei', '--height', type=int)
+    myparser.add_argument('-wide', '--width', type=int)
+    myparser.add_argument('-high', '--height', type=int)
     myparser.add_argument('-c', '--count', default=1, type=int)
     myparser.add_argument('-i', '--input', type=str)
     myparser.add_argument('-o', '--output', default='sprite.bin', type=str)
@@ -58,13 +58,13 @@ x = namespace.x
 y = namespace.y
 count = namespace.count
 length = namespace.length
-height = namespace.height
+width = namespace.width
 
-if length == None or height == None:
+if length == None or width == None:
     print("Please set length and height of sprite(s)")
     exit(0)
 
-if 32/length*24/height < count:
+if 32/length*24/width < count:
     print("You want too many sprites....")
     exit(0)
 
@@ -76,12 +76,12 @@ if len(a) != 6144 | len(a) !=6912:
     print("Strange size of input file. 6144 or 6912 only!")
     exit(0)
 for j in range(count):
-    d += takeonesprite(x, y, length, height)
+    d += takeonesprite(x, y, length, width)
     if x + length < 31:
         x += length
     else:
         x = 0
-        y += height
+        y += width
         if j!=count & y > 23:
             print("The screen is end :(")
             exit(0)
