@@ -61,7 +61,7 @@ width = namespace.width
 height = namespace.height
 
 if width == None or height == None:
-    print("Please set length and height of sprite(s)")
+    print("Please set width and height of sprite(s)")
     exit(0)
 
 if 32/width*24/height < count:
