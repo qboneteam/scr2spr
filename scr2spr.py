@@ -60,7 +60,7 @@ count = namespace.count
 width = namespace.width
 height = namespace.height
 
-if width == None or height == None:
+if width is None or height is None:
     print("Please set width and height of sprite(s)")
     exit(0)
 
