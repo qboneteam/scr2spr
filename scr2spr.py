@@ -31,11 +31,11 @@ def savebin2file(perem, nameoffile):
     f.close()
 
 
-def takeonesprite(temp_x, temp_y, temp_l, temp_w):
+def takeonesprite(temp_x, temp_y, temp_w, temp_h):
     k = bytearray()
     offset = xytoaddr(temp_x, temp_y)
-    for l in range(temp_w * 8):
-        k += a[offset:offset + temp_l]
+    for l in range(temp_h * 8):
+        k += a[offset:offset + temp_w]
         offset = nextline(offset)
     return k
 
@@ -57,14 +57,14 @@ namespace = parser.parse_args(sys.argv[1:])
 x = namespace.x
 y = namespace.y
 count = namespace.count
-length = namespace.length
 width = namespace.width
+height = namespace.height
 
-if length == None or width == None:
+if width == None or height == None:
     print("Please set length and height of sprite(s)")
     exit(0)
 
-if 32/length*24/width < count:
+if 32/width*24/height < count:
     print("You want too many sprites....")
     exit(0)
 
@@ -72,17 +72,17 @@ d = bytearray()
 
 a = binary2array(namespace.input)
 
-if len(a) != 6144 | len(a) !=6912:
+if len(a) != 6144 | len(a) != 6912:
     print("Strange size of input file. 6144 or 6912 only!")
     exit(0)
 for j in range(count):
-    d += takeonesprite(x, y, length, width)
-    if x + length < 31:
-        x += length
+    d += takeonesprite(x, y, width, height)
+    if x + width < 31:
+        x += width
     else:
         x = 0
-        y += width
-        if j!=count & y > 23:
+        y += height
+        if j != count & y > 23:
             print("The screen is end :(")
             exit(0)
 
