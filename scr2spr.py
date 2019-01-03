@@ -77,7 +77,7 @@ if len(a) != 6144 | len(a) != 6912:
     exit(0)
 for j in range(count):
     d += takeonesprite(x, y, width, height)
-    if x + width*2 < 31:
+    if x + width*2 < 33:
         x += width
     else:
         x = 0
