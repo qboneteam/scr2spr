@@ -40,6 +40,15 @@ def takeonesprite(temp_x, temp_y, temp_w, temp_h):
     return k
 
 
+def takespriteattr(temp_x, temp_y, temp_w, temp_h):
+    k = bytearray()
+    offset = temp_y*32 + temp_x + 6144
+    for l in range(temp_h):
+        k += a[offset:offset + temp_w]
+        offset += 32
+    return k
+
+
 def createparser():
     myparser = argparse.ArgumentParser()
     myparser.add_argument('-x', '--x', default=0, type=int)
@@ -47,6 +56,7 @@ def createparser():
     myparser.add_argument('-wide', '--width', type=int)
     myparser.add_argument('-high', '--height', type=int)
     myparser.add_argument('-c', '--count', default=1, type=int)
+    myparser.add_argument('-col', '--color', default=False, type=bool)
     myparser.add_argument('-i', '--input', type=str)
     myparser.add_argument('-o', '--output', default='sprite.bin', type=str)
     return myparser
@@ -59,6 +69,7 @@ y = namespace.y
 count = namespace.count
 width = namespace.width
 height = namespace.height
+color = namespace.color
 
 if width is None or height is None:
     print("Please set width and height of sprite(s)")
@@ -73,10 +84,12 @@ d = bytearray()
 a = binary2array(namespace.input)
 
 if len(a) != 6144 | len(a) != 6912:
-    print("Strange size of input file. 6144 or 6912 only!")
+    print("Strange size of input file. 6144 or 6912 bytes only!")
     exit(0)
 for j in range(count):
     d += takeonesprite(x, y, width, height)
+    if color is True and len(a) == 6912:
+        d += takespriteattr(x, y, width, height)
     if x + width*2 < 33:
         x += width
     else:
