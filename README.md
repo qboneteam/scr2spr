@@ -15,6 +15,8 @@ usage:
 
 '-c', '--count', default=1, type=int
 
+'-col', '--color', default=False, type=bool
+
 '-i', '--input', type=str
 
 '-o', '--output', default='sprite.bin', type=str
