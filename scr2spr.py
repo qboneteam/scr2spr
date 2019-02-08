@@ -62,41 +62,45 @@ def createparser():
     return myparser
 
 
-parser = createparser()
-namespace = parser.parse_args(sys.argv[1:])
-x = namespace.x
-y = namespace.y
-count = namespace.count
-width = namespace.width
-height = namespace.height
-color = namespace.color
+def error(message):
+    print(message, file=sys.stderr)
+    exit(1)
 
-if width is None or height is None:
-    print("Please set width and height of sprite(s)")
-    exit(0)
+def main():
+    parser = createparser()
+    namespace = parser.parse_args(sys.argv[1:])
+    x = namespace.x
+    y = namespace.y
+    count = namespace.count
+    width = namespace.width
+    height = namespace.height
+    color = namespace.color
 
-if 32/width*24/height < count:
-    print("You want too many sprites....")
-    exit(0)
+    if width is None or height is None:
+        error("Please set width and height of sprite(s)")
 
-d = bytearray()
+    if 32 / width * 24 / height < count:
+        error("You want too many sprites....")
 
-a = binary2array(namespace.input)
+    d = bytearray()
 
-if len(a) != 6144 | len(a) != 6912:
-    print("Strange size of input file. 6144 or 6912 bytes only!")
-    exit(0)
-for j in range(count):
-    d += takeonesprite(x, y, width, height)
-    if color is True and len(a) == 6912:
-        d += takespriteattr(x, y, width, height)
-    if x + width*2 < 33:
-        x += width
-    else:
-        x = 0
-        y += height
-        if j != count & y > 23:
-            print("The screen is end :(")
-            exit(0)
+    a = binary2array(namespace.input)
 
-savebin2file(d, namespace.output)
+    if len(a) != 6144 or len(a) != 6912:
+        error("Strange size of input file. 6144 or 6912 bytes only!")
+    for j in range(count):
+        d += takeonesprite(x, y, width, height)
+        if color is True and len(a) == 6912:
+            d += takespriteattr(x, y, width, height)
+        if x + width * 2 < 33:
+            x += width
+        else:
+            x = 0
+            y += height
+            if j != count and y > 23:
+                error("The screen ended unexpectedly :(")
+
+    savebin2file(d, namespace.output)
+
+if __name__ == '__main__':
+    main()
