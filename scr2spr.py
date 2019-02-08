@@ -31,20 +31,20 @@ def savebin2file(perem, nameoffile):
     f.close()
 
 
-def takeonesprite(temp_x, temp_y, temp_w, temp_h):
+def takeonesprite(temp_x, temp_y, temp_w, temp_h, temp_a):
     k = bytearray()
     offset = xytoaddr(temp_x, temp_y)
     for l in range(temp_h * 8):
-        k += a[offset:offset + temp_w]
+        k += temp_a[offset:offset + temp_w]
         offset = nextline(offset)
     return k
 
 
-def takespriteattr(temp_x, temp_y, temp_w, temp_h):
+def takespriteattr(temp_x, temp_y, temp_w, temp_h, temp_a):
     k = bytearray()
     offset = temp_y*32 + temp_x + 6144
     for l in range(temp_h):
-        k += a[offset:offset + temp_w]
+        k += temp_a[offset:offset + temp_w]
         offset += 32
     return k
 
@@ -65,6 +65,7 @@ def createparser():
 def error(message):
     print(message, file=sys.stderr)
     exit(1)
+
 
 def main():
     parser = createparser()
@@ -89,9 +90,9 @@ def main():
     if len(a) != 6144 or len(a) != 6912:
         error("Strange size of input file. 6144 or 6912 bytes only!")
     for j in range(count):
-        d += takeonesprite(x, y, width, height)
+        d += takeonesprite(x, y, width, height, a)
         if color is True and len(a) == 6912:
-            d += takespriteattr(x, y, width, height)
+            d += takespriteattr(x, y, width, height, a)
         if x + width * 2 < 33:
             x += width
         else:
@@ -101,6 +102,7 @@ def main():
                 error("The screen ended unexpectedly :(")
 
     savebin2file(d, namespace.output)
+
 
 if __name__ == '__main__':
     main()
