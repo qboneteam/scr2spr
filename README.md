@@ -1,5 +1,5 @@
 # scr2spr
-screen to sprite converter fo ZX-Spectrum
+screen to sprite converter for ZX-Spectrum
 
 coordinates and sizes sets in char
 
