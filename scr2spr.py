@@ -4,6 +4,9 @@ import sys
 from array import array
 
 
+__version__: str = "20190209"
+
+
 def xytoaddr(xcoord, ycoord):
     return ((ycoord & 0x18) << 8) | ((ycoord & 7) << 5) | (xcoord & 31)
 
@@ -87,7 +90,7 @@ def main():
 
     a = binary2array(namespace.input)
 
-    if len(a) != 6144 and len(a) != 6912:
+    if len(a) not in (6144, 6912):
         error("Strange size of input file. 6144 or 6912 bytes only!")
     if color is True and len(a) == 6144:
         error("You want colors sprites, but you haven't color screen!")
